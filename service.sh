@@ -7,6 +7,13 @@ MODPATH="${0%/*}"
 
 . "$MODPATH/resetprop.sh"
 
+cat "/proc/cmdline" | sed 's/orange/green/i' | sed 's/yellow/green/i' | sed 's/unlocked/locked/i' | sed 's/permissive/enforcing/i' > "${MODDIR}/cmdline"
+
+mount -o bind "${MODDIR}/cmdline /proc/cmdline"
+
+chmod 0640 /proc/cmdline
+chmod 440 /proc/net/unix
+
 if [ "$(cat /sys/fs/selinux/enforce)" != "1" ]; then
     chmod 660 /sys/fs/selinux/enforce
     chmod 440 /sys/fs/selinux/policy
@@ -36,8 +43,8 @@ check_resetprop ro.vendor.warranty_bit 0
 check_resetprop vendor.boot.vbmeta.device_state locked
 check_resetprop vendor.boot.verifiedbootstate green
 check_resetprop sys.oem_unlock_allowed 0
+check_resetprop ro.oem_unlock_supported 0
 check_resetprop init.svc.flash_recovery stopped
-check_resetprop gsm.network.type LTE
 check_resetprop ro.boot.realmebootstate green
 check_resetprop ro.boot.realme.lockstate 1
 
