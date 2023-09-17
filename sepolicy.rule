@@ -2,4 +2,4 @@ deny gmscore_app keystore keystore_key *
 allow zygote unlabeled file { open read getattr }
 allow zygote zygote capability sys_chroot
 allow zygote adb_data_file dir search
-deny { untrusted_app isolated_app untrusted_app_30 untrusted_app_29 app_zygote untrusted_app_27 } keystore keystore_key *
+deny { untrusted_app isolated_app untrusted_app_30 untrusted_app_29 app_zygote untrusted_app_27 appdomain } keystore keystore_key *
