@@ -7,10 +7,6 @@ MODPATH="${0%/*}"
 
 . "$MODPATH/resetprop.sh"
 
-cat "/proc/cmdline" | sed 's/orange/green/i' | sed 's/yellow/green/i' | sed 's/unlocked/locked/i' | sed 's/permissive/enforcing/i' > "${MODDIR}/cmdline"
-
-mount -o bind "${MODDIR}/cmdline /proc/cmdline"
-
 chmod 0640 /proc/cmdline
 chmod 440 /proc/net/unix
 
