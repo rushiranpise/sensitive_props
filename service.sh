@@ -7,13 +7,10 @@ MODPATH="${0%/*}"
 
 . "$MODPATH/resetprop.sh"
 
-chmod 0640 /proc/cmdline
-chmod 440 /proc/net/unix
-
-if [ "$(cat /sys/fs/selinux/enforce)" != "1" ]; then
-    chmod 660 /sys/fs/selinux/enforce
-    chmod 440 /sys/fs/selinux/policy
-fi
+# if [ "$(cat /sys/fs/selinux/enforce)" != "1" ]; then
+#     chmod 660 /sys/fs/selinux/enforce
+#     chmod 440 /sys/fs/selinux/policy
+# fi
 
 while [ "$(getprop sys.boot_completed)" != 1 ]; do
     sleep 1
@@ -66,3 +63,10 @@ done
 if [[ "$(resetprop -v ro.product.first_api_level)" -ge 33 ]]; then
     resetprop -v -n ro.product.first_api_level 32
 fi
+
+
+chmod 0440 /proc/cmdline
+chmod 0440 /proc/net/unix
+chmod 0770 /system/addon.d
+chmod 0770 /system/addon.d/magisk
+chmod 0770 /system/addon.d/99-magisk.sh
