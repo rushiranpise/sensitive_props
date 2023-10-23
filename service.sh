@@ -1,4 +1,4 @@
-MAGISKTMP="$(magisk --path)" || MAGISKTMP=/sbin
+MAGISKTMP="$(magisk --path)" || MAGISKTMP=/sbin || MAGISKTMP=/data/adb/ksu/bin
 MODPATH="${0%/*}"
 
 # Use Magisk Delta feature to dynamic patch prop
@@ -7,10 +7,11 @@ MODPATH="${0%/*}"
 
 . "$MODPATH/resetprop.sh"
 
-# if [ "$(cat /sys/fs/selinux/enforce)" != "1" ]; then
-#     chmod 660 /sys/fs/selinux/enforce
-#     chmod 440 /sys/fs/selinux/policy
-# fi
+# Hiding SELinux | Use toybox to protect *stat* access time reading
+if [[ "$(toybox cat /sys/fs/selinux/enforce)" == "0" ]]; then
+    chmod 640 /sys/fs/selinux/enforce
+    chmod 440 /sys/fs/selinux/policy
+fi
 
 while [ "$(getprop sys.boot_completed)" != 1 ]; do
     sleep 1
