@@ -72,15 +72,15 @@ chmod 0770 /system/addon.d
 chmod 0770 /system/addon.d/magisk
 chmod 0770 /system/addon.d/99-magisk.sh
 
-{
-    while true; do
-        resetprop -n init.svc.adbd stopped
-        resetprop -n sys.usb.ffs.ready 0
-        resetprop -n sys.usb.state mtp
-        resetprop -n sys.usb.config mtp
-        resetprop -n persist.sys.usb.reboot.func mtp
-        resetprop -n ro.oem_unlock_supported 0
-        resetprop -n sys.oem_unlock_allowed 0
-        sleep 1;
-    done
-} &
+# {
+#     while true; do
+#         resetprop -n init.svc.adbd stopped
+#         resetprop -n sys.usb.ffs.ready 0
+#         resetprop -n sys.usb.state mtp
+#         resetprop -n sys.usb.config mtp
+#         resetprop -n persist.sys.usb.reboot.func mtp
+#         resetprop -n ro.oem_unlock_supported 0
+#         resetprop -n sys.oem_unlock_allowed 0
+#         sleep 1;
+#     done
+# } &
