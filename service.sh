@@ -47,6 +47,7 @@ check_reset_prop "ro.boot.warranty_bit" "0"
 check_reset_prop "ro.warranty_bit" "0"
 check_reset_prop "ro.debuggable" "0"
 check_reset_prop "ro.secure" "1"
+check_reset_prop "ro.adb.secure" "1"
 check_reset_prop "ro.secureboot.devicelock" "1"
 check_reset_prop "ro.secureboot.lockstate" "locked"
 check_reset_prop "ro.build.type" "user"
@@ -72,6 +73,7 @@ check_reset_prop "persist.log.tag.LSPosed-Bridge" "S"
 # Fix Native Bridge Detection
 resetprop --delete "ro.dalvik.vm.native.bridge"
 
+# Hide that we booted from recovery when magisk is in recovery mode
 contains_reset_prop "ro.bootmode" "recovery" "unknown"
 contains_reset_prop "ro.boot.bootmode" "recovery" "unknown"
 contains_reset_prop "ro.boot.mode" "recovery" "unknown"
