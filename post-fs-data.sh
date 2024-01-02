@@ -16,6 +16,7 @@ fi
 #    userdebug -> user
 #    test-keys -> release-keys
 
+# Fix Lineage and Debugging props
 replace_value_resetprop ro.build.fingerprint userdebug user
 replace_value_resetprop ro.build.fingerprint "aosp_" ""
 replace_value_resetprop ro.build.fingerprint "lineage_" ""

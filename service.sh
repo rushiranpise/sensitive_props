@@ -17,6 +17,11 @@ while [ "$(getprop sys.boot_completed)" != 1 ]; do
     sleep 1
 done
 
+# Fix Restrictions on non-SDK interface
+settings delete global hidden_api_policy
+settings delete global hidden_api_policy_pre_p_apps
+settings delete global hidden_api_policy_p_apps
+
 # these props should be set after boot completed to avoid breaking some device features
 
 check_resetprop ro.boot.vbmeta.device_state locked
@@ -45,6 +50,13 @@ check_resetprop ro.boot.realme.lockstate 1
 # fake encryption
 check_resetprop ro.crypto.state encrypted
 
+# Disable Lsposed logs
+check_resetprop persist.log.tag.LSPosed S
+check_resetprop persist.log.tag.LSPosed-Bridge S
+
+# Fix Native Bridge Detection
+resetprop --delete ro.dalvik.vm.native.bridge
+
 maybe_resetprop ro.bootmode recovery unknown
 maybe_resetprop ro.boot.bootmode recovery unknown
 maybe_resetprop ro.boot.mode recovery unknown
@@ -70,3 +82,6 @@ chmod 0440 /proc/cmdline
 
 # Restrict permissions to socket file to hide Magisk & co.
 chmod 0440 /proc/net/unix
+
+# Hide Magisk File
+chmod 0770 /system/addon.d
