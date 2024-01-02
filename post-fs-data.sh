@@ -1,6 +1,11 @@
 #!/system/bin/sh
 
 MODDIR="${0%/*}"
+
+if [ "$(magisk -V)" -lt 26300 ]; then
+  touch "$MODDIR/disable"
+fi
+
 MODNAME="${MODDIR##*/}"
 MAGISKTMP="$(magisk --path)" || MAGISKTMP=/sbin
 
