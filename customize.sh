@@ -17,7 +17,7 @@ if [ "$MAGISK_VER_CODE" -lt "$v" ]; then
   abort    "*********************************************************"
 fi
 
-chmod 755 "$MODPATH/service.sh" "$MODPATH/post-fs-data.sh" "$MODPATH/resetprop"
+sh "$MODPATH/service.sh" 2>&1
 
 # Fix init.rc/ART and Recovery/Magisk detections
 ui_print "Fixing init.rc/ART and Recovery/Magisk detections..."
