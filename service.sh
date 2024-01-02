@@ -84,4 +84,4 @@ chmod 0440 /proc/cmdline
 chmod 0440 /proc/net/unix
 
 # Hide Magisk File
-chmod 0770 /system/addon.d
+su chmod 0750 /system/addon.d

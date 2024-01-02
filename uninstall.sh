@@ -6,6 +6,7 @@ MODPATH="${0%/*}"
 rm -rf "$MAGISKTMP/.magisk/mirror/early-mount/initrc.d/oem.rc"
 
 # Restore essential files
+su chmod 0755 /system/addon.d
 mv /system/aaddon.d /system/addon.d
 mv /sdcard/TTWRP /sdcard/TWRP
 mv /vendor/bin/iinstall-recovery.sh /vendor/bin/install-recovery.sh
