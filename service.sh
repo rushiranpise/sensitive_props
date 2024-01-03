@@ -1,5 +1,19 @@
 #!/system/bin/sh
 
+check_reset_prop() {
+  local NAME=$1
+  local EXPECTED=$2
+  local VALUE=$(resetprop $NAME)
+  [ -z $VALUE ] || [ $VALUE = $EXPECTED ] || resetprop $NAME $EXPECTED
+}
+
+contains_reset_prop() {
+  local NAME=$1
+  local CONTAINS=$2
+  local NEWVAL=$3
+  [[ "$(resetprop $NAME)" = *"$CONTAINS"* ]] && resetprop $NAME $NEWVAL
+}
+
 MAGISKTMP="$(magisk --path)" || MAGISKTMP=/sbin
 MODPATH="${0%/*}"
 
@@ -8,7 +22,6 @@ MODPATH="${0%/*}"
 
 [ -d "$MAGISKTMP/.magisk/mirror/early-mount/initrc.d" ] && cp -Tf "$MODPATH/oem.rc" "$MAGISKTMP/.magisk/mirror/early-mount/initrc.d/oem.rc"
 
-. "$MODPATH/resetprop.sh"
 
 # Hiding SELinux | Use toybox to protect *stat* access time reading
 if [[ "$(toybox cat /sys/fs/selinux/enforce)" == "0" ]]; then
@@ -16,17 +29,12 @@ if [[ "$(toybox cat /sys/fs/selinux/enforce)" == "0" ]]; then
     chmod 440 /sys/fs/selinux/policy
 fi
 
-# Reset props after boot completed to avoid breaking some weird devices/ROMs...
-while [ "$(getprop sys.boot_completed)" != 1 ]; do
+{
+  # Reset props after boot completed to avoid breaking some weird devices/ROMs...
+  while [ "$(getprop sys.boot_completed)" != "1" ]
+  do
     sleep 1
-done
-
-# Fix Restrictions on non-SDK interface
-settings delete global hidden_api_policy
-settings delete global hidden_api_policy_pre_p_apps
-settings delete global hidden_api_policy_p_apps
-
-# these props should be set after boot completed to avoid breaking some device features
+  done
 
 check_reset_prop ro.boot.vbmeta.device_state locked
 check_reset_prop ro.boot.verifiedbootstate green
@@ -79,6 +87,8 @@ for prefix in system vendor system_ext product oem odm vendor_dlkm odm_dlkm; do
     check_reset_prop ro.${prefix}.build.tags release-keys
 done
 
+}&
+
 # Don't expose the raw commandline to unprivileged processes.
 chmod 0440 /proc/cmdline
 
@@ -87,3 +97,8 @@ chmod 0440 /proc/net/unix
 
 # Hide Magisk File
 chmod 0750 /system/addon.d
+
+# Fix Restrictions on non-SDK interface
+settings delete global hidden_api_policy
+settings delete global hidden_api_policy_pre_p_apps
+settings delete global hidden_api_policy_p_apps

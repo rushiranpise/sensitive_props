@@ -1,8 +1,22 @@
 #!/system/bin/sh
 
+check_reset_prop() {
+  local NAME=$1
+  local EXPECTED=$2
+  local VALUE=$(resetprop $NAME)
+  [ -z $VALUE ] || [ $VALUE = $EXPECTED ] || resetprop $NAME $EXPECTED
+}
+
+replace_value_resetprop(){
+    local VALUE="$($RESETPROP -v "$1")"
+    [ -z "$VALUE" ] && return
+    local VALUE_NEW="$(echo -n "$VALUE" | sed "s|${2}|${3}|g")"
+    [ "$VALUE" == "$VALUE_NEW" ] || $RESETPROP -v -n "$1" "$VALUE_NEW"
+}
+
 MODDIR="${0%/*}"
 
-if [ "$(magisk -V)" -lt 26300 ]; then
+if [ "$(magisk -V)" -lt 26302 ] || [ "$(/data/adb/ksud -V)" -lt 10818 ]; then
   touch "$MODDIR/disable"
 fi
 
@@ -15,8 +29,6 @@ if [ ! -e "$MAGISKTMP/.magisk/mirror/sepolicy.rules/$MODNAME/sepolicy.rule" ] &&
 fi
 
 ksud sepolicy apply "$MODDIR/sepolicy.rule"
-
-. "$MODDIR/resetprop.sh"
 
 # these props must be set in post-fs-data
 # clear out lineage and aosp words
