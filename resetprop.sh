@@ -1,9 +1,3 @@
-RESETPROP="${0%/*}/bin/arm64-v8a/resetprop"
-
-chmod 755 $RESETPROP
-
-
-
 check_reset_prop() {
   local NAME=$1
   local EXPECTED=$2
