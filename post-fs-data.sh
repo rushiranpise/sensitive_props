@@ -42,10 +42,11 @@ replace_value_resetprop ro.product.name "lineage_" ""
 replace_value_resetprop ro.build.flavor "superior_" ""
 replace_value_resetprop ro.product.name "superior_" ""
 replace_value_resetprop ro.build.flavor "userdebug" ""
+replace_value_resetprop ro.build.date.utc $(date +"%s")
 
 for prefix in system vendor system_ext product oem odm vendor_dlkm odm_dlkm; do
-    check_resetprop ro.${prefix}.build.type user
-    check_resetprop ro.${prefix}.build.tags release-keys
+    check_reset_prop ro.${prefix}.build.type user
+    check_reset_prop ro.${prefix}.build.tags release-keys
     replace_value_resetprop ro.${prefix}.build.fingerprint userdebug user
     replace_value_resetprop ro.${prefix}.build.fingerprint "aosp_" ""
     replace_value_resetprop ro.${prefix}.build.fingerprint "lineage_" ""
@@ -59,14 +60,5 @@ for prefix in system vendor system_ext product oem odm vendor_dlkm odm_dlkm; do
     replace_value_resetprop ro.product.${prefix}.name "aosp_" ""
     replace_value_resetprop ro.product.${prefix}.name "lineage_" ""
     replace_value_resetprop ro.product.${prefix}.name "superior_" ""
+    replace_value_resetprop ro.${prefix}.build.date.utc $(date +"%s")
 done
-
-
-# additions
-replace_value_resetprop ro.build.date.utc $(date +"%s")
-replace_value_resetprop ro.odm.build.date.utc $(date +"%s")
-replace_value_resetprop ro.system.build.date.utc $(date +"%s")
-replace_value_resetprop ro.system_ext.build.date.utc $(date +"%s")
-replace_value_resetprop ro.vendor.build.date.utc $(date +"%s")
-replace_value_resetprop ro.vendor_dlkm.build.date.utc $(date +"%s")
-

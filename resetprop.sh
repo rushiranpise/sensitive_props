@@ -4,14 +4,18 @@ chmod 755 $RESETPROP
 
 
 
-check_resetprop(){
-    local VALUE="$($RESETPROP -v "$1")"
-    [ ! -z "$VALUE" ] && [ "$VALUE" != "$2" ] && $RESETPROP -v -n "$1" "$2"
+check_reset_prop() {
+  local NAME=$1
+  local EXPECTED=$2
+  local VALUE=$(resetprop $NAME)
+  [ -z $VALUE ] || [ $VALUE = $EXPECTED ] || resetprop $NAME $EXPECTED
 }
 
-maybe_resetprop(){
-    local VALUE="$($RESETPROP -v "$1")"
-    [ ! -z "$VALUE" ] && echo "$VALUE" | grep -q "$2" && $RESETPROP -v -n "$1" "$3"
+contains_reset_prop() {
+  local NAME=$1
+  local CONTAINS=$2
+  local NEWVAL=$3
+  [[ "$(resetprop $NAME)" = *"$CONTAINS"* ]] && resetprop $NAME $NEWVAL
 }
 
 replace_value_resetprop(){
