@@ -51,8 +51,8 @@ check_resetprop ro.crypto.state encrypted
 check_resetprop persist.log.tag.LSPosed S
 check_resetprop persist.log.tag.LSPosed-Bridge S
 
-# Fix Native Bridge Detection
-resetprop --delete "ro.dalvik.vm.native.bridge"
+# Fix Native Bridge Detection 
+# resetprop --delete ro.dalvik.vm.native.bridge
 
 # Hide that we booted from recovery when magisk is in recovery mode
 maybe_resetprop ro.bootmode recovery unknown

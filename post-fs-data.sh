@@ -42,8 +42,6 @@ replace_value_resetprop ro.build.flavor "superior_" ""
 replace_value_resetprop ro.product.name "superior_" ""
 replace_value_resetprop ro.build.flavor "userdebug" ""
 replace_value_resetprop ro.build.date.utc $(date +"%s")
-replace_value_resetprop ro.build.version.security_patch $(date)
-replace_value_resetprop ro.vendor.build.security_patch $(date)
 
 for prefix in system vendor system_ext product oem odm vendor_dlkm odm_dlkm; do
     check_resetprop ro.${prefix}.build.type user
