@@ -73,6 +73,9 @@ if [ "$API" -lt 30 ]; then
   abort "! Only support Android 11+ devices"
 fi
 
+mv -f "$MODPATH/bin/$ABI/resetprop" "$MODPATH"
+rm -rf "$MODPATH/bin"
+
 set_perm_recursive "$MODPATH" 0 0 0755 0644
 
 sh "$MODPATH/service.sh" 2>&1

@@ -1,4 +1,4 @@
-RESETPROP="${0%/*}/bin/${$ARCH}/resetprop"
+RESETPROP="${0%/*}/resetprop"
 
 chmod 755 $RESETPROP
 
