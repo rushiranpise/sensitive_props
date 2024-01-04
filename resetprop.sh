@@ -1,4 +1,4 @@
-RESETPROP="${0%/*}/bin/arm64-v8a/resetprop"
+RESETPROP="${0%/*}/bin/$ARCH/resetprop"
 
 chmod 755 $RESETPROP
 
