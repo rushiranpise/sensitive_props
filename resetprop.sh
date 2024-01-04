@@ -1,16 +1,20 @@
+RESETPROP="${0%/*}/resetprop"
+
+chmod 755 $RESETPROP
+
 check_resetprop(){
-    local VALUE="$(resetprop -v "$1")"
-    [ ! -z "$VALUE" ] && [ "$VALUE" != "$2" ] && resetprop -v -n "$1" "$2"
+    local VALUE="$($RESETPROP -v "$1")"
+    [ ! -z "$VALUE" ] && [ "$VALUE" != "$2" ] && $RESETPROP -v -n "$1" "$2"
 }
 
 maybe_resetprop(){
-    local VALUE="$(resetprop -v "$1")"
-    [ ! -z "$VALUE" ] && echo "$VALUE" | grep -q "$2" && resetprop -v -n "$1" "$3"
+    local VALUE="$($RESETPROP -v "$1")"
+    [ ! -z "$VALUE" ] && echo "$VALUE" | grep -q "$2" && $RESETPROP -v -n "$1" "$3"
 }
 
 replace_value_resetprop(){
-    local VALUE="$(resetprop -v "$1")"
+    local VALUE="$($RESETPROP -v "$1")"
     [ -z "$VALUE" ] && return
     local VALUE_NEW="$(echo -n "$VALUE" | sed "s|${2}|${3}|g")"
-    [ "$VALUE" == "$VALUE_NEW" ] || resetprop -v -n "$1" "$VALUE_NEW"
+    [ "$VALUE" == "$VALUE_NEW" ] || $RESETPROP -v -n "$1" "$VALUE_NEW"
 }
