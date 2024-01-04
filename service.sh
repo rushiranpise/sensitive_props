@@ -48,8 +48,8 @@ check_resetprop ro.boot.realme.lockstate 1
 check_resetprop ro.crypto.state encrypted
 
 # Disable Lsposed logs
-check_resetprop persist.log.tag.LSPosed S
-check_resetprop persist.log.tag.LSPosed-Bridge S
+setprop persist.log.tag.LSPosed S
+setprop persist.log.tag.LSPosed-Bridge S
 
 # Fix Native Bridge Detection 
 # resetprop --delete ro.dalvik.vm.native.bridge
