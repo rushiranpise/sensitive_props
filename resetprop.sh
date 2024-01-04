@@ -1,4 +1,4 @@
-RESETPROP="/data/adb/modules/sensitive_props/bin/${$ARCH}/resetprop"
+RESETPROP="${0%/*}/bin/${$ARCH}/resetprop"
 
 chmod 755 $RESETPROP
 
