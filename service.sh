@@ -9,7 +9,7 @@ MODPATH="${0%/*}"
 . "$MODPATH/resetprop.sh"
 
 # Hiding SELinux | Use toybox to protect *stat* access time reading
-if [[ "$(toybox cat /sys/fs/selinux/enforce)" == "0" ]]; then
+if [ "$(toybox cat /sys/fs/selinux/enforce)" == "0" ]; then
     chmod 640 /sys/fs/selinux/enforce
     chmod 440 /sys/fs/selinux/policy
 fi
@@ -20,27 +20,49 @@ done
 
 # these props should be set after boot completed to avoid breaking some device features
 
-check_resetprop ro.boot.vbmeta.device_state locked
-check_resetprop ro.boot.verifiedbootstate green
+# Avoid breaking Realme fingerprint scanners
 check_resetprop ro.boot.flash.locked 1
+
+# Avoid breaking Oppo fingerprint scanners
+check_resetprop ro.boot.vbmeta.device_state locked
+
+# Avoid breaking OnePlus display modes/fingerprint scanners
+check_resetprop vendor.boot.verifiedbootstate green
+
+# Avoid breaking OnePlus/Oppo display fingerprint scanners on OOS/ColorOS 12+
+check_resetprop ro.boot.verifiedbootstate green
 check_resetprop ro.boot.veritymode enforcing
+check_resetprop vendor.boot.vbmeta.device_state locked
+
+# Samsung
 check_resetprop ro.boot.warranty_bit 0
 check_resetprop ro.warranty_bit 0
+check_resetprop ro.vendor.boot.warranty_bit 0
+check_resetprop ro.vendor.warranty_bit 0
+
+# OnePlus
+check_resetprop  ro.is_ever_orange 0
+    
 check_resetprop ro.debuggable 0
 check_resetprop ro.secure 1
 check_resetprop ro.adb.secure 1
+
 check_resetprop ro.secureboot.devicelock 1
 check_resetprop ro.secureboot.lockstate locked
+
+# RootBeer, Microsoft
 check_resetprop ro.build.type user
 check_resetprop ro.build.keys release-keys
 check_resetprop ro.build.tags release-keys
-check_resetprop ro.vendor.boot.warranty_bit 0
-check_resetprop ro.vendor.warranty_bit 0
-check_resetprop vendor.boot.vbmeta.device_state locked
-check_resetprop vendor.boot.verifiedbootstate green
+
+# makes bank apps and Google Pay happy
 check_resetprop sys.oem_unlock_allowed 0
 check_resetprop ro.oem_unlock_supported 0
+
+# Init.rc
 check_resetprop init.svc.flash_recovery stopped
+
+# Realme
 check_resetprop ro.boot.realmebootstate green
 check_resetprop ro.boot.realme.lockstate 1
 
@@ -61,16 +83,22 @@ maybe_resetprop ro.boot.mode recovery unknown
 maybe_resetprop vendor.bootmode recovery unknown
 maybe_resetprop vendor.boot.bootmode recovery unknown
 maybe_resetprop vendor.boot.mode recovery unknown
+
+# MIUI cross-region flash
 maybe_resetprop ro.boot.hwc CN GLOBAL
 maybe_resetprop ro.boot.hwcountry China GLOBAL
-selinux="$(resetprop ro.build.selinux)"
-[ -z "$selinux" ] || resetprop --delete ro.build.selinux
+
+# SELinux
+if [ -n "$(resetprop ro.build.selinux)" ]; then
+    resetprop --delete ro.build.selinux
+fi
 
 for prefix in system vendor system_ext product oem odm vendor_dlkm odm_dlkm; do
     check_resetprop ro.${prefix}.build.type user
     check_resetprop ro.${prefix}.build.tags release-keys
 done
 
+# Avoid breaking encryption, set shipping level to 32 for devices >=33 to allow for software attestation
 if [[ "$(resetprop -v ro.product.first_api_level)" -ge 33 ]]; then
     resetprop -v -n ro.product.first_api_level 32
 fi
