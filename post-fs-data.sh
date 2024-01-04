@@ -46,8 +46,8 @@ replace_value_resetprop ro.build.version.security_patch $(date)
 replace_value_resetprop ro.vendor.build.security_patch $(date)
 
 for prefix in system vendor system_ext product oem odm vendor_dlkm odm_dlkm; do
-    check_reset_prop ro.${prefix}.build.type user
-    check_reset_prop ro.${prefix}.build.tags release-keys
+    check_resetprop ro.${prefix}.build.type user
+    check_resetprop ro.${prefix}.build.tags release-keys
     replace_value_resetprop ro.${prefix}.build.fingerprint userdebug user
     replace_value_resetprop ro.${prefix}.build.fingerprint "aosp_" ""
     replace_value_resetprop ro.${prefix}.build.fingerprint "lineage_" ""
